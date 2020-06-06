@@ -14,14 +14,23 @@ public class App extends javax.swing.JFrame {
     String alfabeto = "01 ";
     String error = "";
     String[] titles = {
-        "<html>Producción instantanea: (q<sub>i</sub>, w<sub>1</sub><b><u>σ</u></b>w<sub>2</sub>)",
-        "<html>Producción instantanea: a<sub>1</sub> a<sub>2</sub> ... a<sub>k-1</sub> q<sub>i</sub> "
+        "Función de transición",
+        "<html>(q<sub>i</sub>, w<sub>1</sub><b><u>σ</u></b>w<sub>2</sub>)",
+        "<html>a<sub>1</sub> a<sub>2</sub> ... a<sub>k-1</sub> q<sub>i</sub> "
         + "<b>a<sub>k</sub></b> a<sub>k+1</sub> ... a<sub>n</sub>"};
+
+    public MT[][] inicializarMatriz() {
+        MT[][] matriz = new MT[1][3];
+        matriz[0][0] = new MT(0, '1', 'r');
+        matriz[0][1] = new MT(0, '0', 'r');
+        matriz[0][2] = new MT(1, ' ', 'l');
+        return matriz;
+    }
 
     public App() {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.matriz = MT.inicializarMatriz();
+        this.matriz = this.inicializarMatriz();
         this.tblInstantaneas.setModel(this.initializeModel(titles));
     }
 
@@ -95,7 +104,7 @@ public class App extends javax.swing.JFrame {
 
             },
             new String [] {
-                "(qi, w1sw2)", "a1 a2 ... ak-1 qi ak ak+1 ... an"
+                "Función de transición", "(qi, w1sw2)", "a1 a2 ... ak-1 qi ak ak+1 ... an"
             }
         ));
         jScrollPane2.setViewportView(tblInstantaneas);
@@ -187,21 +196,21 @@ public class App extends javax.swing.JFrame {
         this.lblInfo.setText("");
         this.error = "";
         String cadena = this.cinta.getText();
-        
+
         if (cadena.contains(" ")) {
             String nuevaCadena = this.cadenaValida(cadena.toCharArray());
             if (this.error.equals("")) {
-                lblInfo.setText("<html><b>La cadena <u>" + this.cinta.getText()
+                lblInfo.setText("<html><b>La entrada <u>" + this.cinta.getText()
                         + "</u> en la cinta es valida!!</b><br/> y fue transformada a: "
                         + nuevaCadena + "</html>");
                 this.cinta.setText(nuevaCadena);
             } else {
-                JOptionPane.showMessageDialog(null, "La cadena: "
+                JOptionPane.showMessageDialog(null, "La entrada: "
                         + this.cinta.getText() + ", NO es valida!!\n" + error,
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "La cadena: "
+            JOptionPane.showMessageDialog(null, "La entrada: "
                     + this.cinta.getText() + ", no contiene el caracter"
                     + " de control (espacio en blanco)!\n" + error,
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -216,8 +225,8 @@ public class App extends javax.swing.JFrame {
     }
 
     // Método para agregar registro a modelo de tabla
-    private DefaultTableModel addRowToModel(DefaultTableModel modelo, String lexema, String componente) {
-        modelo.addRow(new Object[]{lexema, componente});
+    private DefaultTableModel addRowToModel(DefaultTableModel modelo, String funcion, String instantaneaA, String instantaneaB) {
+        modelo.addRow(new Object[]{funcion, instantaneaA, instantaneaB});
         return modelo;
     }
 
@@ -234,32 +243,57 @@ public class App extends javax.swing.JFrame {
                 estado = -1;
                 this.error = "El caracter: " + cadena[posicion] + " es invalido.";
             } else {
+
+                MT funcion = this.matriz[estado][numCaracter];
+                String descripcionA = descripcionA(String.valueOf(cadena), posicion, estado);
+                String descripcionB = descripcionB(String.valueOf(cadena), posicion, estado);
+                String funcionTransicion = funcionTransicion(estado, cadena[posicion], funcion);
+                
+                cadena[posicion] = funcion.getCaracter();
+                posicion = posicion + funcion.getMovimiento();
+                estado = funcion.getEstado();
+
+
+
                 modelo = this.addRowToModel(
                         modelo,
-                        instantaneasA(String.valueOf(cadena), posicion, estado),
-                        instantaneasB(String.valueOf(cadena), posicion, estado));
-                cadena[posicion] = this.matriz[estado][numCaracter].getCaracter();
-                posicion = posicion + this.matriz[estado][numCaracter].getMovimiento();
-                estado = this.matriz[estado][numCaracter].getEstado();
-
+                        funcionTransicion,
+                        descripcionA,
+                        descripcionB
+                );
             }
         } while (estado != -1 && estado != 1);
 
         if (estado != -1) {
             modelo = this.addRowToModel(
                     modelo,
-                    instantaneasA(String.valueOf(cadena), posicion, estado),
-                    instantaneasB(String.valueOf(cadena), posicion, estado));
+                    "",
+                    descripcionA(String.valueOf(cadena), posicion, estado),
+                    descripcionB(String.valueOf(cadena), posicion, estado));
         } else {
             modelo = this.addRowToModel(
-                    modelo, "Error", "Error");
+                    modelo, "", "Error", "Error");
         }
 
         this.tblInstantaneas.setModel(modelo);
         return String.valueOf(cadena);
     }
+    
+    private char espcioBlanco(char caracter){
+        if (caracter == ' ')
+            return 'ƀ';
+        return caracter;
+    }
 
-    private String instantaneasA(String cadena, int posicion, int estado) {
+    private String funcionTransicion(int estado, char caracter, MT funcion) {
+        return "<html>(q<sub>" + estado + "</sub>, " + this.espcioBlanco(caracter)
+                + ") → (q<sub>" + funcion.getEstado() + "</sub>, " 
+                + this.espcioBlanco(funcion.getCaracter()) + ", " 
+                + String.valueOf(funcion.getMovimientoChar()).toUpperCase()
+                + ")</html>";
+    }
+
+    private String descripcionA(String cadena, int posicion, int estado) {
         return "<html>(q<sub>" + estado + "</sub>, "
                 + cadena.substring(0, posicion) + "<b><u>"
                 + cadena.substring(posicion, posicion + 1)
@@ -267,7 +301,7 @@ public class App extends javax.swing.JFrame {
                 + ") &ensp Ⱶ</html>";
     }
 
-    private String instantaneasB(String cadena, int posicion, int estado) {
+    private String descripcionB(String cadena, int posicion, int estado) {
         return "<html>" + cadena.substring(0, posicion)
                 + "q<sub>" + estado + "</sub>" + "<b>"
                 + cadena.substring(posicion, posicion + 1) + "</b>"

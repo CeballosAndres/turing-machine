@@ -12,14 +12,6 @@ public class MT {
         this.movimiento = movimiento;
     }
     
-    public static MT[][] inicializarMatriz(){
-        MT[][] matriz = new MT[1][3];
-        matriz[0][0] = new MT(0,'1','r');
-        matriz[0][1] = new MT(0,'0','r');
-        matriz[0][2] = new MT(1,' ','l');
-        return matriz;
-    }
-    
     public int getEstado(){
         return this.estado;
     }
@@ -34,5 +26,9 @@ public class MT {
         } else {
             return -1;
         }
+    }
+    
+    public char getMovimientoChar(){
+        return this.movimiento;
     }
 }

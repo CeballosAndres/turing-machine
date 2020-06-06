@@ -9,7 +9,7 @@ Alumno: José Andrés Ceballos Vadillo
  */
 public class App extends javax.swing.JFrame {
 
-    // Definición de elementos del autómata
+    // Definición de elementos de la máquina de Turing
     MT[][] matriz;
     String alfabeto = "01 ";
     String error = "";
@@ -19,6 +19,7 @@ public class App extends javax.swing.JFrame {
         "<html>a<sub>1</sub> a<sub>2</sub> ... a<sub>k-1</sub> q<sub>i</sub> "
         + "<b>a<sub>k</sub></b> a<sub>k+1</sub> ... a<sub>n</sub>"};
 
+    // Método para incializar la matriz con la función de transición de nuestra máquina
     public MT[][] inicializarMatriz() {
         MT[][] matriz = new MT[1][3];
         matriz[0][0] = new MT(0, '1', 'r');
@@ -30,7 +31,9 @@ public class App extends javax.swing.JFrame {
     public App() {
         initComponents();
         this.setLocationRelativeTo(null);
+        // Llamada para inicializar matriz
         this.matriz = this.inicializarMatriz();
+        // Iniciar tabla
         this.tblInstantaneas.setModel(this.initializeModel(titles));
     }
 
@@ -42,7 +45,7 @@ public class App extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnRecorrer = new javax.swing.JButton();
         bSalir = new javax.swing.JButton();
-        bAbout = new javax.swing.JButton();
+        btnCreditos = new javax.swing.JButton();
         lblImgItcolima = new javax.swing.JLabel();
         lblImgTecnm = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
@@ -51,16 +54,12 @@ public class App extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblInstantaneas = new javax.swing.JTable();
         lblInfo = new javax.swing.JLabel();
+        btnAyuda = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Máquina de Turing");
 
         cinta.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        cinta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cintaActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Cinta: ");
 
@@ -79,10 +78,10 @@ public class App extends javax.swing.JFrame {
             }
         });
 
-        bAbout.setText("About");
-        bAbout.addActionListener(new java.awt.event.ActionListener() {
+        btnCreditos.setText("Creditos");
+        btnCreditos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bAboutActionPerformed(evt);
+                btnCreditosActionPerformed(evt);
             }
         });
 
@@ -111,46 +110,52 @@ public class App extends javax.swing.JFrame {
 
         lblInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        btnAyuda.setText("Ayuda");
+        btnAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAyudaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(lblInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(19, 19, 19))
-                            .addComponent(lblImgTecnm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(bAbout)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(bSalir))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cinta, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnRecorrer))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblTitulo, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(lblAlumno)
-                                                    .addComponent(lblMateria))
-                                                .addGap(13, 13, 13)))
-                                        .addGap(61, 61, 61)
-                                        .addComponent(lblImgItcolima)))))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(btnCreditos)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnAyuda)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bSalir))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(cinta, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnRecorrer))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblTitulo, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(lblAlumno)
+                                                .addComponent(lblMateria))
+                                            .addGap(13, 13, 13)))
+                                    .addGap(61, 61, 61)
+                                    .addComponent(lblImgItcolima)))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(lblInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(19, 19, 19))
+                        .addComponent(lblImgTecnm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
@@ -179,25 +184,26 @@ public class App extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bSalir)
-                    .addComponent(bAbout))
+                    .addComponent(btnCreditos)
+                    .addComponent(btnAyuda))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cintaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cintaActionPerformed
-
-    }//GEN-LAST:event_cintaActionPerformed
-
+    //Método para inciar el análisis de la entrada
     private void btnRecorrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecorrerActionPerformed
-
+        // Se resetea la tabla y espacio de información para permitir un nuevo a análisis.
         this.tblInstantaneas.setModel(this.initializeModel(titles));
         this.lblInfo.setText("");
         this.error = "";
+        //Obtenemos el contenido de la entrada
         String cadena = this.cinta.getText();
 
+        // Se valida que la cadena contenga el espacio en blanco para proceder
         if (cadena.contains(" ")) {
+            //Se llama al metodo para validar la cadena y se retorna la nueva cadena
             String nuevaCadena = this.cadenaValida(cadena.toCharArray());
             if (this.error.equals("")) {
                 lblInfo.setText("<html><b>La entrada <u>" + this.cinta.getText()
@@ -217,53 +223,45 @@ public class App extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRecorrerActionPerformed
 
-    // Método para inicializar modelo de tabla
-    private DefaultTableModel initializeModel(String[] titles) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(titles);
-        return modelo;
-    }
-
-    // Método para agregar registro a modelo de tabla
-    private DefaultTableModel addRowToModel(DefaultTableModel modelo, String funcion, String instantaneaA, String instantaneaB) {
-        modelo.addRow(new Object[]{funcion, instantaneaA, instantaneaB});
-        return modelo;
-    }
-
-// Metodo para validar la cadena    
+    // Metodo para validar la cadena    
     private String cadenaValida(char[] cadena) {
+        //Se inicializan las variables
         int estado = 0;
         int posicion = 0;
-        int numCaracter;
+        int numCaracter = 0;
+
+        //Se inicia el modelo para la construcción de la tabla
         DefaultTableModel modelo = this.initializeModel(this.titles);
 
+        //Se inicia el recorrido de la entrada
         do {
+            // Se llama a método para obtener el valor numerico de caracter analizado
             numCaracter = caracterAIndice(cadena[posicion], this.alfabeto);
+            // Manejo de erro de caracter no valido
             if (numCaracter == -1) {
                 estado = -1;
                 this.error = "El caracter: " + cadena[posicion] + " es invalido.";
             } else {
-
+                // Obtenemos el objeto de la matriz correspondiente al estado y caracter de entrada
                 MT funcion = this.matriz[estado][numCaracter];
-                String descripcionA = descripcionA(String.valueOf(cadena), posicion, estado);
-                String descripcionB = descripcionB(String.valueOf(cadena), posicion, estado);
-                String funcionTransicion = funcionTransicion(estado, cadena[posicion], funcion);
-                
+
+                // Agragamos la tupla al modelo de la tabla
+                modelo = this.addRowToModel(
+                        modelo,
+                        funcionTransicion(estado, cadena[posicion], funcion),
+                        descripcionA(String.valueOf(cadena), posicion, estado),
+                        descripcionB(String.valueOf(cadena), posicion, estado)
+                );
+
+                // Se almacenan los valores para la siguiente iteración
                 cadena[posicion] = funcion.getCaracter();
                 posicion = posicion + funcion.getMovimiento();
                 estado = funcion.getEstado();
-
-
-
-                modelo = this.addRowToModel(
-                        modelo,
-                        funcionTransicion,
-                        descripcionA,
-                        descripcionB
-                );
             }
+            // Termina cuando se obtiene un caracter no valido o llega a aceptación
         } while (estado != -1 && estado != 1);
 
+        // Agregado de ultima tupla a modelo de tabla
         if (estado != -1) {
             modelo = this.addRowToModel(
                     modelo,
@@ -274,25 +272,43 @@ public class App extends javax.swing.JFrame {
             modelo = this.addRowToModel(
                     modelo, "", "Error", "Error");
         }
-
+        // Cargar el modelo de tabla en la interfaz gráfica
         this.tblInstantaneas.setModel(modelo);
         return String.valueOf(cadena);
     }
-    
-    private char espcioBlanco(char caracter){
-        if (caracter == ' ')
+
+    // Método para inicializar modelo de tabla
+    private DefaultTableModel initializeModel(String[] titles) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(titles);
+        return modelo;
+    }
+
+    // Método para agregar un registro al modelo de tabla
+    private DefaultTableModel addRowToModel(DefaultTableModel modelo,
+            String funcion, String instantaneaA, String instantaneaB) {
+        modelo.addRow(new Object[]{funcion, instantaneaA, instantaneaB});
+        return modelo;
+    }
+
+    // Método para sobreescribir el espacio en blanco sobre la tabla
+    private char espcioBlanco(char caracter) {
+        if (caracter == ' ') {
             return 'ƀ';
+        }
         return caracter;
     }
 
+    // Método para formatear la función de transición
     private String funcionTransicion(int estado, char caracter, MT funcion) {
         return "<html>(q<sub>" + estado + "</sub>, " + this.espcioBlanco(caracter)
-                + ") → (q<sub>" + funcion.getEstado() + "</sub>, " 
-                + this.espcioBlanco(funcion.getCaracter()) + ", " 
+                + ") → (q<sub>" + funcion.getEstado() + "</sub>, "
+                + this.espcioBlanco(funcion.getCaracter()) + ", "
                 + String.valueOf(funcion.getMovimientoChar()).toUpperCase()
                 + ")</html>";
     }
 
+    // Método para formatear descripción instantanea
     private String descripcionA(String cadena, int posicion, int estado) {
         return "<html>(q<sub>" + estado + "</sub>, "
                 + cadena.substring(0, posicion) + "<b><u>"
@@ -301,6 +317,7 @@ public class App extends javax.swing.JFrame {
                 + ") &ensp Ⱶ</html>";
     }
 
+    // Método para formatear descripción instantanea
     private String descripcionB(String cadena, int posicion, int estado) {
         return "<html>" + cadena.substring(0, posicion)
                 + "q<sub>" + estado + "</sub>" + "<b>"
@@ -318,15 +335,34 @@ public class App extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_bSalirActionPerformed
 
-    private void bAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAboutActionPerformed
-        JOptionPane.showMessageDialog(null, "Programa para validar una cadena "
-                + "mediante \nun Autómata Finito Deterministico.\n\n"
-                + "Ingrese la cadena deseada y \nde clic en Validar.\n\n"
-                + "Autor: José Andrés Ceballos Vadillo\n"
-                + "Tecnológico Nacional de México campus Colima\n"
-                + "Materia: Lenguajes y Autómatas I",
-                "About", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_bAboutActionPerformed
+    // Método para desplegar creditos del programa
+    private void btnCreditosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreditosActionPerformed
+        JOptionPane.showMessageDialog(null,
+                "Tecnológico Nacional de México Campus Colima\n"
+                + "Lenguajes y Autómatas I\n\n"
+                + "Programa: Máquina de Turing complemento a uno\n\n"
+                + "José Andrés Ceballos Vadillo\n"
+                + "17460386",
+                "Créditos", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnCreditosActionPerformed
+
+    private void btnAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAyudaActionPerformed
+        JOptionPane.showMessageDialog(null,
+                "Con este programa se puede observar el funcionamiento de una máquina\n"
+                + "de Turing que obtinene el complemento a uno de un número binario.\n\n"
+                + "Las siguientes son las opciones disponibles:\n"
+                + "  - Recorrer: inicia el análisis de la entrada en la cinta\n"
+                + "  - Creditos: muestra los creditos del programa\n"
+                + "  - Ayuda: abre este cuadro de información\n"
+                + "  - Salir: termina la ejecución del programa\n\n"
+                + "Para ejecutar el programa es necesario:\n"
+                + "  1. Ingresar en la cinta una entrada que inluya el espacio en blanco\n"
+                + "  2. Dar clic sobre el boton Recorrer\n"
+                + "  3. El proceso se puede repetir tantasa veces sea necesario\n\n"
+                + "En caso de no ingresar el espacio en blanco o haber ingresado un \n"
+                + "caracter invalido se notificará el error.\n\n",
+                "Ayuda", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnAyudaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -365,8 +401,9 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bAbout;
     private javax.swing.JButton bSalir;
+    private javax.swing.JButton btnAyuda;
+    private javax.swing.JButton btnCreditos;
     private javax.swing.JButton btnRecorrer;
     private javax.swing.JTextField cinta;
     private javax.swing.JLabel jLabel2;
